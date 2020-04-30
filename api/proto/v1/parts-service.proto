@@ -1,0 +1,88 @@
+syntax = "proto3";
+package v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Part {
+    // ИД детали
+    int64 id = 1;
+    // ИД производителя детали
+    int64 manufacturer_id = 2;
+    // Код поставщика
+    string vendor_code = 3;
+    // Время создания
+    google.protobuf.Timestamp created_at = 4;
+}
+
+// Данные запроса для создания новой детали
+message CreateRequest{
+    // Версия API, полезная вещь:)
+    string api = 1;
+    // Деталь которую нужно создать
+    Part part = 2;
+}
+
+// Ответ на создание детали
+message CreateResponse{
+    string api = 1;
+    // ИД созданной детали
+    // Не знал что лучше в данной ситуации, целиком объект или только ИД
+    // Так как ИД можно получить из результата SQL операции, решил оставить ИД
+    int64 id = 2;
+}
+
+message ReadRequest{
+    string api = 1;
+    int64 id = 2;
+}
+
+message ReadResponse{
+    string api = 1;
+    Part part = 2;
+}
+
+message UpdateRequest{
+    string api = 1;
+    Part part = 2;
+}
+
+message UpdateResponse{
+    string api = 1;
+    int64 updated = 2;
+}
+
+message DeleteRequest{
+    string api = 1;
+    int64 id = 2;
+}
+
+message DeleteResponse{
+    string api = 1;
+    int64 deleted = 2;
+}
+
+message ReadAllRequest{
+    string api = 1;
+}
+
+message ReadAllResponse{
+    string api = 1;
+    repeated Part parts = 2;
+}
+
+service PartService {
+    // Создание новой детали
+    rpc Create(CreateRequest) returns (CreateResponse);
+
+    // Чтение детали
+    rpc Read(ReadRequest) returns (ReadResponse);
+
+    // Обновление детали
+    rpc Update(UpdateRequest) returns (UpdateResponse);
+
+    // Удаление детали
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+
+    // Получение всех деталей
+    rpc ReadAll(ReadAllRequest) returns (ReadAllResponse);
+}

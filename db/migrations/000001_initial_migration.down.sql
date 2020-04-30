@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS part;
+DROP TABLE IF EXISTS part_manufacturer;

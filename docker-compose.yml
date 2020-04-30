@@ -1,0 +1,44 @@
+version: '3'
+services:
+  parts-api:
+    build: .
+    container_name: parts-api
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    environment:
+      PORT: 9090
+    volumes:
+        - api:/usr/src/
+    links:
+        - postgres
+    depends_on:
+        - postgres
+    networks:
+        - fullstack
+    restart: always
+  postgres:
+    container_name: parts_postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: parts
+      PGDATA: /data/postgres
+      UID: 1000
+    ports:
+      - "5433:5433"
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    networks:
+      - fullstack
+    restart: unless-stopped
+    command: -p 5433
+volumes:
+  api:
+  database_postgres:
+networks:
+  fullstack:
+    driver: bridge
+        
